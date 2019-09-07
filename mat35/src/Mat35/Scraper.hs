@@ -1,11 +1,15 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Mat35.Scraper where
+module Mat35.Scraper
+  ( fetchScreenings
+  )
+where
 
 import           Data.Maybe
 import           Mat35.Domain
 import           Text.HTML.Scalpel
 
-siteURL = "http://www.mat.cz/kino/cz/cykly?action=projekce-z-filmoveho-pasu"
+rootURL = "http://www.mat.cz"
+siteURL = rootURL ++ "/kino/cz/cykly?action=projekce-z-filmoveho-pasu"
 
 fetchScreenings :: IO (Maybe [Screening])
 fetchScreenings = scrapeURLWithConfig config siteURL screenings
@@ -22,4 +26,4 @@ fetchScreenings = scrapeURLWithConfig config siteURL screenings
     title <- text $ "div" @: [hasClass "cinema123"] // "a"
     link  <- attr "href" $ "div" @: [hasClass "cinema123"] // "a"
     price <- text $ "div" @: [hasClass "cinema124"] // "strong"
-    return $ Screening title link price (date ++ " " ++ time)
+    return $ Screening title (rootURL ++ link) price (date ++ " " ++ time)
