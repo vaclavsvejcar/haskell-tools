@@ -1,7 +1,9 @@
 copyright: 2019 Vaclav Svejcar
 maintainer: vaclav.svejcar@gmail.com
 dependencies:
+- aeson
 - base >= 4.7 && < 5
+- bytestring
 - scalpel
 - text
 name: mat35
@@ -10,7 +12,7 @@ extra-source-files:
 - README.md
 author: Vaclav Svejcar
 github: vaclavsvejcar/mat35
-license: APL2
+license: Apache-2.0
 executables:
   mat35:
     source-dirs: src
