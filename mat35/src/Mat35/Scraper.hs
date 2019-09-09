@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE FlexibleContexts, OverloadedStrings, QuasiQuotes #-}
 module Mat35.Scraper
   ( fetchScreenings
   )
@@ -9,6 +9,7 @@ import           Data.Maybe
 import           Mat35.Domain
 import           Mat35.URLs
 import           Text.HTML.Scalpel
+import           Text.Regex.PCRE.Heavy
 
 fetchScreenings :: IO (Maybe [Screening])
 fetchScreenings = scrapeURLWithConfig config screeningsURL screenings
@@ -29,5 +30,10 @@ fetchScreenings = scrapeURLWithConfig config screeningsURL screenings
 
     let movieId   = splitOn "?movie-id=" detailPath !! 1
     let ticketsId = splitOn "?id=" ticketsLink !! 1
+    let dateTime  = parseDate date ++ ", " ++ time
 
-    return $ Screening title movieId ticketsId price (date ++ " " ++ time)
+    return $ Screening title movieId ticketsId price dateTime
+
+parseDate :: String -> String
+parseDate raw =
+  let (_, groups) = head $ scan [re|(.*?)(\d+)(.*)|] raw in unwords groups

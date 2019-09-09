@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 67610d23982d639d9a477e73815830307f5a11e0764f5c9656100bd4166813a3
+-- hash: 97aef1a700a9f90e967bd6d9ee2191dc1d8d2e91c2dd93f287f7536122a74758
 
 name:           mat35
 version:        0.1.0
@@ -39,6 +39,7 @@ executable mat35
       aeson
     , base >=4.7 && <5
     , bytestring
+    , pcre-heavy
     , scalpel
     , split
     , text
