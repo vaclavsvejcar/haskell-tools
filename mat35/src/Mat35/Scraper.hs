@@ -4,15 +4,14 @@ module Mat35.Scraper
   )
 where
 
+import           Data.List.Split
 import           Data.Maybe
 import           Mat35.Domain
+import           Mat35.URLs
 import           Text.HTML.Scalpel
 
-rootURL = "http://www.mat.cz"
-siteURL = rootURL ++ "/kino/cz/cykly?action=projekce-z-filmoveho-pasu"
-
 fetchScreenings :: IO (Maybe [Screening])
-fetchScreenings = scrapeURLWithConfig config siteURL screenings
+fetchScreenings = scrapeURLWithConfig config screeningsURL screenings
  where
   config = Config utf8Decoder Nothing
 
@@ -21,9 +20,14 @@ fetchScreenings = scrapeURLWithConfig config siteURL screenings
 
   screening :: Scraper String Screening
   screening = do
-    date  <- text $ "div" @: [hasClass "cinema121"]
-    time  <- text $ "div" @: [hasClass "cinema122"]
-    title <- text $ "div" @: [hasClass "cinema123"] // "a"
-    link  <- attr "href" $ "div" @: [hasClass "cinema123"] // "a"
-    price <- text $ "div" @: [hasClass "cinema124"] // "strong"
-    return $ Screening title (rootURL ++ link) price (date ++ " " ++ time)
+    date        <- text $ "div" @: [hasClass "cinema121"]
+    time        <- text $ "div" @: [hasClass "cinema122"]
+    title       <- text $ "div" @: [hasClass "cinema123"] // "a"
+    detailPath  <- attr "href" $ "div" @: [hasClass "cinema123"] // "a"
+    ticketsLink <- attr "href" $ "div" @: [hasClass "cinema124"] // "a"
+    price       <- text $ "div" @: [hasClass "cinema124"] // "strong"
+
+    let movieId   = splitOn "?movie-id=" detailPath !! 1
+    let ticketsId = splitOn "?id=" ticketsLink !! 1
+
+    return $ Screening title movieId ticketsId price (date ++ " " ++ time)

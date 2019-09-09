@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 75efdc6a3f1843d76b6413f934b74098ae31691b4b664dc4750d3a81b921cddd
+-- hash: 67610d23982d639d9a477e73815830307f5a11e0764f5c9656100bd4166813a3
 
 name:           mat35
 version:        0.1.0
@@ -30,6 +30,7 @@ executable mat35
       Mat35.Domain
       Mat35.Render
       Mat35.Scraper
+      Mat35.URLs
       Paths_mat35
   hs-source-dirs:
       src
@@ -39,5 +40,6 @@ executable mat35
     , base >=4.7 && <5
     , bytestring
     , scalpel
+    , split
     , text
   default-language: Haskell2010
