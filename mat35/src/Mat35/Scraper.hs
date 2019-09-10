@@ -11,15 +11,15 @@ import           Mat35.URLs
 import           Text.HTML.Scalpel
 import           Text.Regex.PCRE.Heavy
 
-fetchScreenings :: IO (Maybe [Screening])
+fetchScreenings :: IO (Maybe [ScreeningMeta])
 fetchScreenings = scrapeURLWithConfig config screeningsURL screenings
  where
   config = Config utf8Decoder Nothing
 
-  screenings :: Scraper String [Screening]
+  screenings :: Scraper String [ScreeningMeta]
   screenings = chroots ("div" @: [hasClass "cinema"]) screening
 
-  screening :: Scraper String Screening
+  screening :: Scraper String ScreeningMeta
   screening = do
     date        <- text $ "div" @: [hasClass "cinema121"]
     time        <- text $ "div" @: [hasClass "cinema122"]
@@ -32,7 +32,7 @@ fetchScreenings = scrapeURLWithConfig config screeningsURL screenings
     let ticketsId = splitOn "?id=" ticketsLink !! 1
     let dateTime  = parseDate date ++ ", " ++ time
 
-    return $ Screening title movieId ticketsId price dateTime
+    return $ ScreeningMeta title movieId ticketsId price dateTime
 
 parseDate :: String -> String
 parseDate raw =
