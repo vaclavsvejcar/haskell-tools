@@ -10,8 +10,8 @@ screeningsURL = rootURL ++ "/kino/cz/cykly?action=projekce-z-filmoveho-pasu"
 
 -- URL to fetch ticket portal page for movie, specified by its ticket ID.
 ticketsURL :: String -> String
-ticketsURL id = "https://system.cinemaware.eu/wstep1.php?id=" ++ id
+ticketsURL tId = "https://system.cinemaware.eu/wstep1.php?id=" ++ tId
 
 -- URL to fetch movie detail, specified by its movie ID.
 movieURL :: String -> String
-movieURL id = rootURL ++ "/kino/cz/kino-mat?movie-id=" ++ id
+movieURL mId = rootURL ++ "/kino/cz/kino-mat?movie-id=" ++ mId
