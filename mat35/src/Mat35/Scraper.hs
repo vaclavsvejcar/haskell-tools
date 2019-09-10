@@ -1,6 +1,8 @@
 {-# LANGUAGE FlexibleContexts, OverloadedStrings, QuasiQuotes #-}
+{-# LANGUAGE DuplicateRecordFields #-}
 module Mat35.Scraper
-  ( fetchScreenings
+  ( fetchDetail
+  , fetchScreenings
   )
 where
 
@@ -11,15 +13,15 @@ import           Mat35.URLs
 import           Text.HTML.Scalpel
 import           Text.Regex.PCRE.Heavy
 
-fetchScreenings :: IO (Maybe [ScreeningMeta])
+fetchScreenings :: IO (Maybe [Screening])
 fetchScreenings = scrapeURLWithConfig config screeningsURL screenings
  where
   config = Config utf8Decoder Nothing
 
-  screenings :: Scraper String [ScreeningMeta]
+  screenings :: Scraper String [Screening]
   screenings = chroots ("div" @: [hasClass "cinema"]) screening
 
-  screening :: Scraper String ScreeningMeta
+  screening :: Scraper String Screening
   screening = do
     date        <- text $ "div" @: [hasClass "cinema121"]
     time        <- text $ "div" @: [hasClass "cinema122"]
@@ -32,7 +34,29 @@ fetchScreenings = scrapeURLWithConfig config screeningsURL screenings
     let ticketsId = splitOn "?id=" ticketsLink !! 1
     let dateTime  = parseDate date ++ ", " ++ time
 
-    return $ ScreeningMeta title movieId ticketsId price dateTime
+    return $ Screening title price dateTime movieId ticketsId
+
+fetchDetail :: Screening -> IO (Maybe ScreeningDetail)
+fetchDetail s = scrapeURLWithConfig config (ticketsURL (ticketsId s)) detail
+ where
+  config = Config utf8Decoder Nothing
+
+  detail :: Scraper String ScreeningDetail
+  detail = do
+    let seatsS      = "div" @: ["id" @= "hladisko"]
+    let allSeatsS   = "path" @: [hasClass "seat"]
+    let availSeatsS = "path" @: [hasClass "seat", notP ("fill" @= "#fff")]
+
+    allSeats   <- htmls $ seatsS // allSeatsS
+    availSeats <- htmls $ seatsS // availSeatsS
+
+    let sTitle       = title (s :: Screening)
+    let sPrice       = price (s :: Screening)
+    let sDateTime    = dateTime (s :: Screening)
+    let allSeatsNo   = length allSeats
+    let availSeatsNo = allSeatsNo - length availSeats
+
+    return $ ScreeningDetail sTitle sPrice sDateTime allSeatsNo availSeatsNo
 
 parseDate :: String -> String
 parseDate raw =

@@ -12,5 +12,5 @@ main = do
  where
   printError = putStrLn "ERROR: cannot fetch screenings"
 
-  printResult :: [ScreeningMeta] -> IO ()
+  printResult :: [Screening] -> IO ()
   printResult = putStrLn . render
