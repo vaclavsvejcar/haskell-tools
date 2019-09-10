@@ -4,16 +4,16 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 97aef1a700a9f90e967bd6d9ee2191dc1d8d2e91c2dd93f287f7536122a74758
+-- hash: 19e81431d2ea5822deec3c9f9700f98f120baade3ec9d333e0445f6188218671
 
 name:           mat35
 version:        0.1.0
 description:    todo
-homepage:       https://github.com/vaclavsvejcar/mat35#readme
-bug-reports:    https://github.com/vaclavsvejcar/mat35/issues
+homepage:       https://github.com/vaclavsvejcar/haskell-tools#readme
+bug-reports:    https://github.com/vaclavsvejcar/haskell-tools/issues
 author:         Vaclav Svejcar
 maintainer:     vaclav.svejcar@gmail.com
-copyright:      2019 Vaclav Svejcar
+copyright:      (c) 2019 Vaclav Svejcar
 license:        Apache-2.0
 license-file:   LICENSE
 build-type:     Simple
@@ -22,19 +22,20 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/vaclavsvejcar/mat35
+  location: https://github.com/vaclavsvejcar/haskell-tools
 
 executable mat35
   main-is: Main.hs
   other-modules:
-      Mat35.Domain
+      Mat35.Domain.Screening
+      Mat35.Domain.ScreeningDetail
       Mat35.Render
       Mat35.Scraper
       Mat35.URLs
       Paths_mat35
   hs-source-dirs:
       src
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N -Wall -Wcompat -Wincomplete-record-updates -Wincomplete-uni-patterns -Wredundant-constraints
   build-depends:
       aeson
     , base >=4.7 && <5

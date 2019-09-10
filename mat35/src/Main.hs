@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
-import           Mat35.Domain
+import           Mat35.Domain.ScreeningDetail
 import           Mat35.Render
 import           Mat35.Scraper
 

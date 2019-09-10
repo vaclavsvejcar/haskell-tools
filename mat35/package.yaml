@@ -1,4 +1,4 @@
-copyright: 2019 Vaclav Svejcar
+copyright: (c) 2019 Vaclav Svejcar
 maintainer: vaclav.svejcar@gmail.com
 dependencies:
 - aeson
@@ -13,7 +13,7 @@ version: 0.1.0
 extra-source-files:
 - README.md
 author: Vaclav Svejcar
-github: vaclavsvejcar/mat35
+github: vaclavsvejcar/haskell-tools
 license: Apache-2.0
 executables:
   mat35:
@@ -23,4 +23,9 @@ executables:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
+    - -Wall
+    - -Wcompat
+    - -Wincomplete-record-updates
+    - -Wincomplete-uni-patterns
+    - -Wredundant-constraints
 description: todo

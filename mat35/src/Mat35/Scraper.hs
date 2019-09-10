@@ -1,4 +1,3 @@
-{-# LANGUAGE DuplicateRecordFields #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
@@ -9,17 +8,17 @@ module Mat35.Scraper
 where
 
 import           Data.List.Split
-import           Data.Maybe
-import           Mat35.Domain
+import qualified Mat35.Domain.Screening        as Screening
+import qualified Mat35.Domain.ScreeningDetail  as ScreeningDetail
+import           Mat35.Domain.Screening         ( Screening )
+import           Mat35.Domain.ScreeningDetail   ( ScreeningDetail )
 import           Mat35.URLs
 import           Text.HTML.Scalpel
 import           Text.Regex.PCRE.Heavy
 
 fetchScreenings :: IO (Maybe [Screening])
-fetchScreenings = scrapeURLWithConfig config screeningsURL screenings
+fetchScreenings = scrapeURLWithConfig utf8Config screeningsURL screenings
  where
-  config = Config utf8Decoder Nothing
-
   screenings :: Scraper String [Screening]
   screenings = chroots ("div" @: [hasClass "cinema"]) screening
 
@@ -36,12 +35,12 @@ fetchScreenings = scrapeURLWithConfig config screeningsURL screenings
     let ticketsId = splitOn "?id=" ticketsLink !! 1
     let dateTime  = parseDate date ++ ", " ++ time
 
-    return $ Screening title price dateTime movieId ticketsId
+    return $ Screening.New title price dateTime movieId ticketsId
 
 fetchDetail :: Screening -> IO (Maybe ScreeningDetail)
-fetchDetail s = scrapeURLWithConfig config (ticketsURL (ticketsId s)) detail
+fetchDetail s = scrapeURLWithConfig utf8Config url detail
  where
-  config = Config utf8Decoder Nothing
+  url = ticketsURL (Screening.ticketsId s)
 
   detail :: Scraper String ScreeningDetail
   detail = do
@@ -52,14 +51,16 @@ fetchDetail s = scrapeURLWithConfig config (ticketsURL (ticketsId s)) detail
     allSeats   <- htmls $ seatsS // allSeatsS
     availSeats <- htmls $ seatsS // availSeatsS
 
-    let sTitle    = title (s :: Screening)
-    let sPrice    = price (s :: Screening)
-    let sDateTime = dateTime (s :: Screening)
-    let detailURL = movieURL (movieId (s :: Screening))
-    let allNo     = length allSeats
-    let availNo   = allNo - length availSeats
+    let allSeatsNo = length allSeats
+    return $ ScreeningDetail.New (Screening.title s)
+                                 (Screening.price s)
+                                 (Screening.dateTime s)
+                                 (movieURL . Screening.movieId $ s)
+                                 allSeatsNo
+                                 (allSeatsNo - length availSeats)
 
-    return $ ScreeningDetail sTitle sPrice sDateTime detailURL allNo availNo
+utf8Config :: Config String
+utf8Config = Config utf8Decoder Nothing
 
 parseDate :: String -> String
 parseDate raw =
