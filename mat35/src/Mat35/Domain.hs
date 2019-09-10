@@ -6,10 +6,11 @@ import           Data.Aeson
 import           GHC.Generics
 
 data ScreeningDetail =
-  ScreeningDetail { title :: String
-                  , price :: String
-                  , dateTime :: String
-                  , allSeatsNo :: Int
+  ScreeningDetail { title            :: String
+                  , price            :: String
+                  , dateTime         :: String
+                  , detailURL        :: String
+                  , allSeatsNo       :: Int
                   , availableSeatsNo :: Int
                   } deriving (Show, Generic)
 

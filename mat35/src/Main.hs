@@ -8,9 +8,10 @@ import           Mat35.Scraper
 main :: IO ()
 main = do
   screenings <- fetchScreenings
-  maybe printError printResult screenings
+  details    <- fmap sequenceA . mapM fetchDetail . concat $ screenings
+  maybe printError printResult details
  where
-  printError = putStrLn "ERROR: cannot fetch screenings"
+  printError = putStrLn "ERROR: unknown failure, cannot fetch screenings"
 
-  printResult :: [Screening] -> IO ()
+  printResult :: [ScreeningDetail] -> IO ()
   printResult = putStrLn . render

@@ -1,5 +1,7 @@
-{-# LANGUAGE FlexibleContexts, OverloadedStrings, QuasiQuotes #-}
 {-# LANGUAGE DuplicateRecordFields #-}
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE QuasiQuotes #-}
 module Mat35.Scraper
   ( fetchDetail
   , fetchScreenings
@@ -50,13 +52,14 @@ fetchDetail s = scrapeURLWithConfig config (ticketsURL (ticketsId s)) detail
     allSeats   <- htmls $ seatsS // allSeatsS
     availSeats <- htmls $ seatsS // availSeatsS
 
-    let sTitle       = title (s :: Screening)
-    let sPrice       = price (s :: Screening)
-    let sDateTime    = dateTime (s :: Screening)
-    let allSeatsNo   = length allSeats
-    let availSeatsNo = allSeatsNo - length availSeats
+    let sTitle    = title (s :: Screening)
+    let sPrice    = price (s :: Screening)
+    let sDateTime = dateTime (s :: Screening)
+    let detailURL = movieURL (movieId (s :: Screening))
+    let allNo     = length allSeats
+    let availNo   = allNo - length availSeats
 
-    return $ ScreeningDetail sTitle sPrice sDateTime allSeatsNo availSeatsNo
+    return $ ScreeningDetail sTitle sPrice sDateTime detailURL allNo availNo
 
 parseDate :: String -> String
 parseDate raw =
