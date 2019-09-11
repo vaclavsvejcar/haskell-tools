@@ -1,9 +1,12 @@
 module Mat35.Render where
 
-import           Data.Aeson.Text
+import           Data.Aeson
+import           Data.Aeson.Encode.Pretty
+import           Data.ByteString.Lazy          as BL
 import qualified Data.Text                     as T
-import qualified Data.Text.Lazy                as TL
-import Mat35.Domain.ScreeningDetail
+import qualified Data.Text.Encoding            as E
+import           Mat35.Domain.ScreeningDetail
 
-render :: [ScreeningDetail] -> String
-render = T.unpack . TL.toStrict . encodeToLazyText
+render :: [ScreeningDetail] -> Bool -> String
+render ds pretty = T.unpack . E.decodeUtf8 . BL.toStrict . encodeJSON $ ds
+  where encodeJSON = if pretty then encodePretty else encode

@@ -2,8 +2,10 @@ copyright: (c) 2019 Vaclav Svejcar
 maintainer: vaclav.svejcar@gmail.com
 dependencies:
 - aeson
+- aeson-pretty
 - base >= 4.7 && < 5
 - bytestring
+- cmdargs
 - pcre-heavy
 - scalpel
 - split
