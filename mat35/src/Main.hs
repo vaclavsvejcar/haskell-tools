@@ -1,7 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
-import           Mat35.Domain.ScreeningDetail
 import           Mat35.Render
 import           Mat35.Scraper
 
@@ -11,7 +10,5 @@ main = do
   details    <- fmap sequenceA . mapM fetchDetail . concat $ screenings
   maybe printError printResult details
  where
-  printError = putStrLn "ERROR: unknown failure, cannot fetch screenings"
-
-  printResult :: [ScreeningDetail] -> IO ()
+  printError  = putStrLn "ERROR: unknown failure, cannot fetch screenings"
   printResult = putStrLn . render
