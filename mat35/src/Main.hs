@@ -16,10 +16,10 @@ options =
 
 main :: IO ()
 main = do
-  opts             <- cmdArgs options
-  screenings       <- fetchScreenings
-  screeningDetails <- fmap sequenceA . mapM fetchDetail . concat $ screenings
-  maybe printError (printResult $ prettyPrint opts) screeningDetails
+  opts       <- cmdArgs options
+  screenings <- fetchScreenings
+  sDetails   <- fmap sequenceA . mapM fetchDetail . concat $ screenings
+  maybe printError (printResult $ prettyPrint opts) sDetails
  where
   printError = putStrLn "ERROR: unknown failure, cannot fetch screenings"
-  printResult bs ds = putStrLn (render ds bs)
+  printResult pretty sDetails = putStrLn (render sDetails pretty)
