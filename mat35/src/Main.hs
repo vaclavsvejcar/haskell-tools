@@ -1,25 +1,26 @@
-{-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
-import           Mat35.Render
-import           Mat35.Scraper
+import           Data.Maybe                     ( catMaybes )
+import qualified Data.Text                     as T
+import           Mat35.API
+import           Mat35.JSON                     ( toJSONText )
+import           Mat35.Types                    ( CmdOptions(..) )
 import           System.Console.CmdArgs
 
-data Options = Options { prettyPrint :: Bool } deriving (Data, Typeable)
 
-options :: Options
+-- data Options = Options { prettyPrint :: Bool } deriving (Data, Typeable)
+
+options :: CmdOptions
 options =
-  Options { prettyPrint = False &= help "Pretty print the output JSON" }
+  CmdOptions { prettyPrint = False &= help "Pretty print the output JSON" }
     &= summary "mat35 v0.1.0, Copyright (c) 2019 Vaclav Svejcar"
     &= program "mat35"
 
 main :: IO ()
 main = do
-  opts       <- cmdArgs options
-  screenings <- fetchScreenings
-  sDetails   <- fmap sequenceA . mapM fetchDetail . concat $ screenings
-  maybe printError (printResult $ prettyPrint opts) sDetails
- where
-  printError = putStrLn "ERROR: unknown failure, cannot fetch screenings"
-  printResult pretty sDetails = putStrLn (render sDetails pretty)
+  opts              <- cmdArgs options
+  urls              <- fetchURLs
+  movies            <- mapM fetchMovie urls
+  moviesWithTickets <- mapM fillTicketsInfo (catMaybes movies)
+  putStrLn . T.unpack . toJSONText (prettyPrint opts) $ moviesWithTickets
