@@ -1,4 +1,7 @@
-module Mat35.Utils where
+module Mat35.Utils
+  ( withoutPrefix
+  )
+where
 
 import           Data.Aeson                     ( defaultOptions
                                                 , fieldLabelModifier

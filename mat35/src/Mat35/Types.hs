@@ -1,6 +1,14 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE DeriveGeneric #-}
-module Mat35.Types where
+module Mat35.Types
+  ( CmdOptions(..)
+  , Movie(..)
+  , Screening(..)
+  , Tickets(..)
+  , MovieURL
+  , TicketsURL
+  )
+where
 
 import           Data.Aeson                     ( genericToJSON
                                                 , ToJSON(toJSON)

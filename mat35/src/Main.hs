@@ -4,12 +4,9 @@ module Main where
 import           Data.Maybe                     ( catMaybes )
 import qualified Data.Text                     as T
 import           Mat35.API
-import           Mat35.JSON                     ( toJSONText )
+import           Mat35.JSON
 import           Mat35.Types                    ( CmdOptions(..) )
 import           System.Console.CmdArgs
-
-
--- data Options = Options { prettyPrint :: Bool } deriving (Data, Typeable)
 
 options :: CmdOptions
 options =
