@@ -47,7 +47,7 @@ data Tickets =
 type MovieURL = T.Text
 type TicketsURL = T.Text
 
---------------------------------------------------------------------------------
+----------------------------  TYPE CLASS INSTANCES  ----------------------------
 
 instance ToJSON Movie where
   toJSON = genericToJSON $ withoutPrefix 1

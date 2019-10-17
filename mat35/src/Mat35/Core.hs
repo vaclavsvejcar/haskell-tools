@@ -1,6 +1,6 @@
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE OverloadedStrings #-}
-module Mat35.API
+module Mat35.Core
   ( fetchMovie
   , fetchURLs
   , fillTicketsInfo
@@ -31,7 +31,7 @@ fetchMovie url = scrapeURLWithConfig utf8Config (T.unpack url) movie
     (language, is35mm) <- seekNext $ do
       language <- text "td"
       tags     <- attrs "alt" $ "td" // "img" @: ["alt" @= "35mm film"]
-      return (language, not (null tags))
+      return (language, not $ null tags)
     price      <- seekNext $ text "td"
     ticketsURL <- seekNext $ attr "href" $ "td" // "a"
     let dateTime = date <> " " <> time

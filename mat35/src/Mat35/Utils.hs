@@ -1,5 +1,6 @@
 module Mat35.Utils
-  ( withoutPrefix
+  ( buildVer
+  , withoutPrefix
   )
 where
 
@@ -8,6 +9,8 @@ import           Data.Aeson                     ( defaultOptions
                                                 , Options
                                                 )
 import           Data.Char                      ( toLower )
+import           Data.Version                   ( showVersion )
+import           Paths_mat35                    ( version )
 
 withoutPrefix :: Int -> Options
 withoutPrefix len = defaultOptions { fieldLabelModifier = dropPrefix len }
@@ -16,3 +19,6 @@ withoutPrefix len = defaultOptions { fieldLabelModifier = dropPrefix len }
 
   firstToLower []      = []
   firstToLower (h : t) = toLower h : t
+
+buildVer :: String
+buildVer = showVersion version
