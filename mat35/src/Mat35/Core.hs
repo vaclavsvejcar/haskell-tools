@@ -15,6 +15,7 @@ import           Mat35.Types
 import           Mat35.URLs
 import           Text.HTML.Scalpel
 
+
 fetchMovie :: MovieURL -> IO (Maybe Movie)
 fetchMovie url = scrapeURLWithConfig utf8Config (T.unpack url) movie
  where
@@ -26,18 +27,23 @@ fetchMovie url = scrapeURLWithConfig utf8Config (T.unpack url) movie
 
   screening :: Scraper T.Text (Maybe Screening)
   screening = inSerial $ do
-    date               <- seekNext $ text "td"
-    time               <- seekNext $ text "td"
-    (language, is35mm) <- seekNext $ do
+    date                 <- seekNext $ text "td"
+    time                 <- seekNext $ text "td"
+    (language, filmType) <- seekNext $ do
       language <- text "td"
-      tags     <- attrs "alt" $ "td" // "img" @: ["alt" @= "35mm film"]
-      return (language, not $ null tags)
+      tags16mm <- attrs "alt" $ "td" // "img" @: ["alt" @= "16mm film"]
+      tags35mm <- attrs "alt" $ "td" // "img" @: ["alt" @= "35mm film"]
+      return (language, parseFilmType $ tags16mm ++ tags35mm)
     price      <- seekNext $ text "td"
     ticketsURL <- seekNext $ attr "href" $ "td" // "a"
     let dateTime = date <> " " <> time
-    return $ if is35mm
-      then Just $ Screening dateTime language price ticketsURL 0 0
-      else Nothing
+    return $ fmap (Screening dateTime language price ticketsURL 0 0) filmType
+
+
+  parseFilmType :: [T.Text] -> Maybe FilmType
+  parseFilmType ["16mm film"] = Just F16mm
+  parseFilmType ["35mm film"] = Just F35mm
+  parseFilmType _             = Nothing
 
 fetchTickets :: TicketsURL -> IO (Maybe Tickets)
 fetchTickets url = scrapeURLWithConfig utf8Config (T.unpack url) tickets
