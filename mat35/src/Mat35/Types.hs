@@ -1,3 +1,14 @@
+{-|
+Module      : <MODULE_NAME>
+Description : <DESCRIPTION>
+Copyright   : 
+License     : BSD-3
+Maintainer  : 
+Stability   : experimental
+Portability : POSIX
+
+ <LONGER_DESCRIPTION>
+-}
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE DeriveGeneric #-}
 module Mat35.Types
