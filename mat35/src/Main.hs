@@ -1,17 +1,7 @@
-{-|
-Module      : <MODULE_NAME>
-Description : <DESCRIPTION>
-Copyright   : 
-License     : BSD-3
-Maintainer  : 
-Stability   : experimental
-Portability : POSIX
-
- <LONGER_DESCRIPTION>
--}
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
+import           Data.List                      ( nub )
 import           Data.Maybe                     ( catMaybes )
 import qualified Data.Text                     as T
 import           Mat35.Core
@@ -32,4 +22,5 @@ main = do
   urls              <- fetchURLs
   movies            <- mapM fetchMovie urls
   moviesWithTickets <- mapM fillTicketsInfo (catMaybes movies)
-  putStrLn . T.unpack . toJSONText (prettyPrint opts) $ moviesWithTickets
+  let deduplicated = nub moviesWithTickets
+  putStrLn . T.unpack . toJSONText (prettyPrint opts) $ deduplicated

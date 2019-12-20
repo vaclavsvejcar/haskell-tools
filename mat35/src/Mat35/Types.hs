@@ -1,16 +1,5 @@
-{-|
-Module      : <MODULE_NAME>
-Description : <DESCRIPTION>
-Copyright   : 
-License     : BSD-3
-Maintainer  : 
-Stability   : experimental
-Portability : POSIX
-
- <LONGER_DESCRIPTION>
--}
 {-# LANGUAGE DeriveDataTypeable #-}
-{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE DeriveGeneric      #-}
 module Mat35.Types
   ( CmdOptions(..)
   , FilmType(..)
@@ -22,9 +11,9 @@ module Mat35.Types
   )
 where
 
-import           Data.Aeson                     ( genericToJSON
-                                                , ToJSON(toJSON)
+import           Data.Aeson                     ( ToJSON(toJSON)
                                                 , Value(String)
+                                                , genericToJSON
                                                 )
 import qualified Data.Text                     as T
 import           GHC.Generics                   ( Generic )
@@ -34,32 +23,36 @@ import           System.Console.CmdArgs         ( Data
                                                 )
 
 
-data CmdOptions =
-    CmdOptions { prettyPrint :: Bool
-               } deriving (Data, Typeable)
+data CmdOptions = CmdOptions
+  { prettyPrint :: Bool
+  }
+  deriving (Data, Typeable)
 
 data FilmType = F16mm | F35mm deriving (Eq, Generic)
 
-data Movie =
-    Movie { mTitle      :: T.Text
-          , mMovieURL   :: T.Text
-          , mScreenings :: [Screening]
-          } deriving (Generic, Show)
+data Movie = Movie
+  { mTitle      :: T.Text
+  , mMovieURL   :: T.Text
+  , mScreenings :: [Screening]
+  }
+  deriving (Eq, Generic, Show)
 
-data Screening =
-    Screening { sDateTime         :: T.Text
-              , sLanguage         :: T.Text
-              , sPrice            :: T.Text
-              , sTicketsURL       :: TicketsURL
-              , sTicketsAll       :: Int
-              , sTicketsAvailable :: Int
-              , sFilmType         :: FilmType
-              }  deriving (Generic, Show)
+data Screening = Screening
+  { sDateTime         :: T.Text
+  , sLanguage         :: T.Text
+  , sPrice            :: T.Text
+  , sTicketsURL       :: TicketsURL
+  , sTicketsAll       :: Int
+  , sTicketsAvailable :: Int
+  , sFilmType         :: FilmType
+  }
+  deriving (Eq, Generic, Show)
 
-data Tickets =
-    Tickets { tAll       :: Int
-            , tAvailable :: Int
-            }
+data Tickets = Tickets
+  { tAll       :: Int
+  , tAvailable :: Int
+  }
+  deriving (Eq, Show)
 
 type MovieURL = T.Text
 type TicketsURL = T.Text

@@ -1,23 +1,12 @@
-{-|
-Module      : <MODULE_NAME>
-Description : <DESCRIPTION>
-Copyright   : 
-License     : BSD-3
-Maintainer  : 
-Stability   : experimental
-Portability : POSIX
-
- <LONGER_DESCRIPTION>
--}
 module Mat35.Utils
   ( buildVer
   , withoutPrefix
   )
 where
 
-import           Data.Aeson                     ( defaultOptions
+import           Data.Aeson                     ( Options
+                                                , defaultOptions
                                                 , fieldLabelModifier
-                                                , Options
                                                 )
 import           Data.Char                      ( toLower )
 import           Data.Version                   ( showVersion )

@@ -1,15 +1,4 @@
-{-|
-Module      : <MODULE_NAME>
-Description : <DESCRIPTION>
-Copyright   : 
-License     : BSD-3
-Maintainer  : 
-Stability   : experimental
-Portability : POSIX
-
- <LONGER_DESCRIPTION>
--}
-{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE FlexibleContexts  #-}
 {-# LANGUAGE OverloadedStrings #-}
 module Mat35.Core
   ( fetchMovie
@@ -18,10 +7,10 @@ module Mat35.Core
   )
 where
 
-import qualified Data.Text                     as T
 import           Data.Maybe                     ( catMaybes
                                                 , fromMaybe
                                                 )
+import qualified Data.Text                     as T
 import           Mat35.Types
 import           Mat35.URLs
 import           Text.HTML.Scalpel
