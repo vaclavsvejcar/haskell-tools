@@ -9,7 +9,7 @@ import           Mat35.Utils                    ( buildVer )
 import           Options.Applicative
 
 newtype Options = Options
-  { optPrettyPrint :: Bool
+  { oPrettyPrint :: Bool
   }
   deriving (Eq, Show)
 

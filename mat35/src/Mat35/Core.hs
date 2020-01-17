@@ -10,6 +10,7 @@ where
 import           Data.Maybe                     ( catMaybes
                                                 , fromMaybe
                                                 )
+import           Data.Text                      ( Text )
 import qualified Data.Text                     as T
 import           Mat35.Types
 import           Mat35.URLs
@@ -19,13 +20,10 @@ import           Text.HTML.Scalpel
 fetchMovie :: MovieURL -> IO (Maybe Movie)
 fetchMovie url = scrapeURLWithConfig utf8Config (T.unpack url) movie
  where
-  movie :: Scraper T.Text Movie
   movie = chroot ("div" @: [hasClass "rent1"]) $ do
     screenings <- chroots ("table" @: [hasClass "cinematab"] // "tr") screening
     title      <- text "h2"
     return $ Movie title url (catMaybes screenings)
-
-  screening :: Scraper T.Text (Maybe Screening)
   screening = inSerial $ do
     date                 <- seekNext $ text "td"
     time                 <- seekNext $ text "td"
@@ -38,9 +36,6 @@ fetchMovie url = scrapeURLWithConfig utf8Config (T.unpack url) movie
     ticketsURL <- seekNext $ attr "href" $ "td" // "a"
     let dateTime = date <> " " <> time
     return $ fmap (Screening dateTime language price ticketsURL 0 0) filmType
-
-
-  parseFilmType :: [T.Text] -> Maybe FilmType
   parseFilmType ["16mm film"] = Just F16mm
   parseFilmType ["35mm film"] = Just F35mm
   parseFilmType _             = Nothing
@@ -48,7 +43,6 @@ fetchMovie url = scrapeURLWithConfig utf8Config (T.unpack url) movie
 fetchTickets :: TicketsURL -> IO (Maybe Tickets)
 fetchTickets url = scrapeURLWithConfig utf8Config (T.unpack url) tickets
  where
-  tickets :: Scraper T.Text Tickets
   tickets = do
     let seatsS      = "div" @: ["id" @= "hladisko"]
     let allSeatsS   = "path" @: [hasClass "seat"]
@@ -63,11 +57,8 @@ fetchURLs :: IO [MovieURL]
 fetchURLs = fmap (fromMaybe [])
                  (scrapeURLWithConfig utf8Config moviesURL movies)
  where
-  movies :: Scraper T.Text [MovieURL]
   movies = chroots ("div" @: [hasClass "cinema"]) movie
-
-  movie :: Scraper T.Text MovieURL
-  movie = do
+  movie  = do
     link <- attr "href" $ "div" @: [hasClass "cinema123"] // "a"
     return $ T.pack rootURL <> link
 
@@ -76,7 +67,6 @@ fillTicketsInfo movie = do
   screeningsWithTickets <- mapM fillTickets (mScreenings movie)
   return $ movie { mScreenings = screeningsWithTickets }
  where
-  fillTickets :: Screening -> IO Screening
   fillTickets screening = do
     maybeTickets <- fetchTickets (sTicketsURL screening)
     return $ case maybeTickets of
@@ -85,5 +75,5 @@ fillTicketsInfo movie = do
                                 , sTicketsAvailable = tAvailable tickets
                                 }
 
-utf8Config :: Config T.Text
+utf8Config :: Config Text
 utf8Config = Config utf8Decoder Nothing

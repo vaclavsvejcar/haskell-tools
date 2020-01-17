@@ -17,4 +17,4 @@ main = do
   movies            <- mapM fetchMovie urls
   moviesWithTickets <- mapM fillTicketsInfo (catMaybes movies)
   let deduplicated = nub moviesWithTickets
-  putStrLn . T.unpack . toJSONText (optPrettyPrint opts) $ deduplicated
+  putStrLn . T.unpack . toJSONText (oPrettyPrint opts) $ deduplicated

@@ -13,23 +13,25 @@ import           Data.Aeson                     ( ToJSON(toJSON)
                                                 , Value(String)
                                                 , genericToJSON
                                                 )
+import           Data.Text                      ( Text )
 import qualified Data.Text                     as T
+
 import           GHC.Generics                   ( Generic )
 import           Mat35.Utils                    ( withoutPrefix )
 
 data FilmType = F16mm | F35mm deriving (Eq, Generic)
 
 data Movie = Movie
-  { mTitle      :: T.Text
-  , mMovieURL   :: T.Text
+  { mTitle      :: Text
+  , mMovieURL   :: Text
   , mScreenings :: [Screening]
   }
   deriving (Eq, Generic, Show)
 
 data Screening = Screening
-  { sDateTime         :: T.Text
-  , sLanguage         :: T.Text
-  , sPrice            :: T.Text
+  { sDateTime         :: Text
+  , sLanguage         :: Text
+  , sPrice            :: Text
   , sTicketsURL       :: TicketsURL
   , sTicketsAll       :: Int
   , sTicketsAvailable :: Int
@@ -43,8 +45,8 @@ data Tickets = Tickets
   }
   deriving (Eq, Show)
 
-type MovieURL = T.Text
-type TicketsURL = T.Text
+type MovieURL = Text
+type TicketsURL = Text
 
 ----------------------------  TYPE CLASS INSTANCES  ----------------------------
 
