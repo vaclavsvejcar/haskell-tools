@@ -1,17 +1,17 @@
-copyright: (c) 2019 Vaclav Svejcar
+copyright: (c) 2019-2020 Vaclav Svejcar
 maintainer: vaclav.svejcar@gmail.com
 dependencies:
 - aeson
 - aeson-pretty
 - base >= 4.7 && < 5
 - bytestring
-- cmdargs
+- optparse-applicative
 - pcre-heavy
 - scalpel
 - split
 - text
 name: mat35
-version: 0.2.1.1
+version: 0.2.2.0
 extra-source-files:
 - README.md
 author: Vaclav Svejcar

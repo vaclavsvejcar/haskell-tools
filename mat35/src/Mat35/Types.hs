@@ -1,8 +1,6 @@
-{-# LANGUAGE DeriveDataTypeable #-}
-{-# LANGUAGE DeriveGeneric      #-}
+{-# LANGUAGE DeriveGeneric #-}
 module Mat35.Types
-  ( CmdOptions(..)
-  , FilmType(..)
+  ( FilmType(..)
   , Movie(..)
   , Screening(..)
   , Tickets(..)
@@ -18,15 +16,6 @@ import           Data.Aeson                     ( ToJSON(toJSON)
 import qualified Data.Text                     as T
 import           GHC.Generics                   ( Generic )
 import           Mat35.Utils                    ( withoutPrefix )
-import           System.Console.CmdArgs         ( Data
-                                                , Typeable
-                                                )
-
-
-data CmdOptions = CmdOptions
-  { prettyPrint :: Bool
-  }
-  deriving (Data, Typeable)
 
 data FilmType = F16mm | F35mm deriving (Eq, Generic)
 
