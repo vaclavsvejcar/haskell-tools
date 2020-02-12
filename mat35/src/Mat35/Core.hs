@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE LambdaCase        #-}
 {-# LANGUAGE OverloadedStrings #-}
 module Mat35.Core
   ( fetchMovie
@@ -34,23 +35,24 @@ fetchMovie url = scrapeURLWithConfig utf8Config (T.unpack url) movie
       return (language, parseFilmType $ tags16mm ++ tags35mm)
     price      <- seekNext $ text "td"
     ticketsURL <- seekNext $ attr "href" $ "td" // "a"
-    let dateTime = date <> " " <> time
+    let dateTime = T.unwords [date, time]
     return $ fmap (Screening dateTime language price ticketsURL 0 0) filmType
-  parseFilmType ["16mm film"] = Just F16mm
-  parseFilmType ["35mm film"] = Just F35mm
-  parseFilmType _             = Nothing
+  parseFilmType = \case
+    ["16mm film"] -> Just Film16mm
+    ["35mm film"] -> Just Film35mm
+    _             -> Nothing
 
 fetchTickets :: TicketsURL -> IO (Maybe Tickets)
 fetchTickets url = scrapeURLWithConfig utf8Config (T.unpack url) tickets
  where
   tickets = do
     let seatsS      = "div" @: ["id" @= "hladisko"]
-    let allSeatsS   = "path" @: [hasClass "seat"]
-    let availSeatsS = "path" @: [hasClass "seat", notP ("fill" @= "#fff")]
+        allSeatsS   = "path" @: [hasClass "seat"]
+        availSeatsS = "path" @: [hasClass "seat", notP ("fill" @= "#fff")]
     allSeats   <- htmls $ seatsS // allSeatsS
     availSeats <- htmls $ seatsS // availSeatsS
     let allSeatsNo   = length allSeats
-    let availSeatsNo = allSeatsNo - length availSeats
+        availSeatsNo = allSeatsNo - length availSeats
     return $ Tickets allSeatsNo availSeatsNo
 
 fetchURLs :: IO [MovieURL]

@@ -1,4 +1,5 @@
 {-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE LambdaCase    #-}
 module Mat35.Types
   ( FilmType(..)
   , Movie(..)
@@ -19,7 +20,7 @@ import qualified Data.Text                     as T
 import           GHC.Generics                   ( Generic )
 import           Mat35.Utils                    ( withoutPrefix )
 
-data FilmType = F16mm | F35mm deriving (Eq, Generic)
+data FilmType = Film16mm | Film35mm deriving (Eq, Generic)
 
 data Movie = Movie
   { mTitle      :: Text
@@ -51,8 +52,9 @@ type TicketsURL = Text
 ----------------------------  TYPE CLASS INSTANCES  ----------------------------
 
 instance Show FilmType where
-  show F16mm = "16mm"
-  show F35mm = "35mm"
+  show = \case
+    Film16mm -> "16mm"
+    Film35mm -> "35mm"
 
 instance ToJSON FilmType where
   toJSON = String . T.pack . show

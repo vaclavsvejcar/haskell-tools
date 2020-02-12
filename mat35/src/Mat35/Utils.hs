@@ -1,3 +1,4 @@
+{-# LANGUAGE LambdaCase #-}
 module Mat35.Utils
   ( buildVer
   , withoutPrefix
@@ -16,9 +17,9 @@ withoutPrefix :: Int -> Options
 withoutPrefix len = defaultOptions { fieldLabelModifier = dropPrefix len }
  where
   dropPrefix pLen str = firstToLower $ drop pLen str
-
-  firstToLower []      = []
-  firstToLower (h : t) = toLower h : t
+  firstToLower = \case
+    []      -> []
+    (h : t) -> toLower h : t
 
 buildVer :: String
 buildVer = showVersion version
