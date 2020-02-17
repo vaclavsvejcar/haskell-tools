@@ -4,7 +4,6 @@ module Mat35.Options
   )
 where
 
-import           Data.Semigroup                 ( (<>) )
 import           Mat35.Utils                    ( buildVer )
 import           Options.Applicative
 
