@@ -1,14 +1,14 @@
-name:                respiwatch
-version:             0.1.0.0
-github:              "githubuser/respiwatch"
-license:             BSD3
-author:              "Author name here"
-maintainer:          "example@example.com"
-copyright:           "2020 Author name here"
+name: respiwatch
+version: 0.0.1.0
+github: "vaclavsvejcar/haskell-tools"
+license: BSD3
+author: "Vaclav Svejcar"
+maintainer: "vaclav.svejcar@gmail.com"
+copyright: "Copyright (c) 2020 Vaclav Svejcar"
 
 extra-source-files:
-- README.md
-- ChangeLog.md
+  - README.md
+  - ChangeLog.md
 
 # Metadata used when publishing your package
 # synopsis:            Short description of your package
@@ -17,32 +17,36 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/githubuser/respiwatch#readme>
+description: Please see the README on GitHub at <https://github.com/vaclavsvejcar/haskell-tools#readme>
 
 dependencies:
-- base >= 4.7 && < 5
+  - base >= 4.7 && < 5
+  - optparse-applicative
+  - rio
 
 library:
   source-dirs: src
+  dependencies:
+    - scalpel
 
 executables:
-  respiwatch-exe:
-    main:                Main.hs
-    source-dirs:         app
+  respiwatch:
+    main: Main.hs
+    source-dirs: app
     ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
     dependencies:
-    - respiwatch
+      - respiwatch
 
 tests:
   respiwatch-test:
-    main:                Spec.hs
-    source-dirs:         test
+    main: Spec.hs
+    source-dirs: test
     ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
     dependencies:
-    - respiwatch
+      - respiwatch

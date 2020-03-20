@@ -4,16 +4,16 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: de0eeef5cee2a48ecf09adb90b33265ed12d7323fe6cb51f441aff1d3b3029b5
+-- hash: 8cee174e8f06633498b9ab13ed8ea67f422cfe71a45f079391e5e7da85158f53
 
 name:           respiwatch
-version:        0.1.0.0
-description:    Please see the README on GitHub at <https://github.com/githubuser/respiwatch#readme>
-homepage:       https://github.com/githubuser/respiwatch#readme
-bug-reports:    https://github.com/githubuser/respiwatch/issues
-author:         Author name here
-maintainer:     example@example.com
-copyright:      2020 Author name here
+version:        0.0.1.0
+description:    Please see the README on GitHub at <https://github.com/vaclavsvejcar/haskell-tools#readme>
+homepage:       https://github.com/vaclavsvejcar/haskell-tools#readme
+bug-reports:    https://github.com/vaclavsvejcar/haskell-tools/issues
+author:         Vaclav Svejcar
+maintainer:     vaclav.svejcar@gmail.com
+copyright:      Copyright (c) 2020 Vaclav Svejcar
 license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
@@ -23,20 +23,27 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/githubuser/respiwatch
+  location: https://github.com/vaclavsvejcar/haskell-tools
 
 library
   exposed-modules:
       Lib
+      RespiWatch.Crawler.RShield
+      RespiWatch.Env
+      RespiWatch.Main
+      RespiWatch.Options
   other-modules:
       Paths_respiwatch
   hs-source-dirs:
       src
   build-depends:
       base >=4.7 && <5
+    , optparse-applicative
+    , rio
+    , scalpel
   default-language: Haskell2010
 
-executable respiwatch-exe
+executable respiwatch
   main-is: Main.hs
   other-modules:
       Paths_respiwatch
@@ -45,7 +52,9 @@ executable respiwatch-exe
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , optparse-applicative
     , respiwatch
+    , rio
   default-language: Haskell2010
 
 test-suite respiwatch-test
@@ -58,5 +67,7 @@ test-suite respiwatch-test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , optparse-applicative
     , respiwatch
+    , rio
   default-language: Haskell2010
